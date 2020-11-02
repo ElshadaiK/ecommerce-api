@@ -1,0 +1,19 @@
+{
+  "name": "ecommerce-api",
+  "version": "1.0.0",
+  "description": "A simple api for ecommerce purpose",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ElshadaiK/ecommerce-api.git"
+  },
+  "author": "Elshadai",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ElshadaiK/ecommerce-api/issues"
+  },
+  "homepage": "https://github.com/ElshadaiK/ecommerce-api#readme"
+}

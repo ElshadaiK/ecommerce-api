@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const logger = require('./../config/logger');
 const { mongo, env } = require('./vars');
 
+const migration = require('../lib/migration.lib');
+
 // set mongoose Promise to Bluebird
 mongoose.Promise = Promise;
 
@@ -33,7 +35,11 @@ exports.connect = () => {
       useFindAndModify: false,
     })
     .then(async () => {
-      console.log('mongoDB connected...')
+      console.log('mongoDB connected...');
+      
+      await migration.migratePermissions()
+      await migration.migrateRoles()
+      await migration.migrateUsers()
 
     });
   return mongoose.connection;

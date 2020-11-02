@@ -1,6 +1,7 @@
 const { pick } = require('lodash')
 
-const productModel = require('../models/product-model')
+const productModel = require('../models/product-model');
+const cartModel = require('../models/cart-model');
 
 exports.All = async (req, res) => {
 
@@ -105,7 +106,7 @@ exports.remove = async (req, res) => {
     }
 }
 
-exports.addToCart = async (req, res) => {
+exports.addToCart = async (req, res, next) => {
     const {user} = req
     const {itemId, quantity} = req.body
     try{
@@ -113,8 +114,27 @@ exports.addToCart = async (req, res) => {
         if(user){
             const item = await productModel.findById(itemId);
             if(item){
+                const user_id = user.data._id;
                 if(item.quantity >= quantity){
+                    const newlyAddedItems = {
+                        item: itemId,
+                        amount: quantity
+                    }
+                    let cart = await cartModel.findOne({user: user_id, status: 'pending'})
+                    if(cart){
+                        cart = await cartModel.create({user: user_id, status: 'pending'})
+                    }else{
+                        // If there is the item added in the cart before
+                    }
+                    const updatedCart = await cartModel.updateOne(
+                        {user: user_id, status: 'pending'},
+                        {$push: {items: newlyAddedItems}},
+                        {new: true}
+                    );
+                    // Update the store
                     
+                    res.json(updatedCart);
+                    next();
                 }
                 else{
                     throw new Error(`There aren't enough quantities available. The maximun you can buy is ${item.quantity}`)

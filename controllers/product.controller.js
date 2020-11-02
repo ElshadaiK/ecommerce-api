@@ -104,3 +104,59 @@ exports.remove = async (req, res) => {
         
     }
 }
+
+exports.addToCart = async (req, res) => {
+    const {user} = req
+    const {itemId, quantity} = req.body
+    try{
+
+        if(user){
+            const item = await productModel.findById(itemId);
+            if(item){
+                if(item.quantity >= quantity){
+                    
+                }
+                else{
+                    throw new Error(`There aren't enough quantities available. The maximun you can buy is ${item.quantity}`)
+                }
+            }
+            else{
+                throw new Error('Item not found') 
+            }
+        }
+        else{
+            throw new Error('You have to login first') 
+        }
+
+    }
+    
+    catch (err) {
+      res.status(404).json({
+          error: true,
+          message: err.message
+      });
+    }
+}
+
+exports.purchase = async (req, res) => {
+    const {user} = req
+    const {itemId, quantity} = req.body
+    try{
+
+        if(user){
+
+        }
+        
+        else{
+            throw new Error('You have to login first') 
+        }
+
+    }
+    
+    catch (err) {
+      res.status(404).json({
+          error: true,
+          message: err.message
+      });
+    }
+}

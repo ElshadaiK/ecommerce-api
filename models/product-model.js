@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate-v2');
 
 const ProductSchema = new mongoose.Schema({
     name: { type: String, unique: true, required: true },
@@ -9,5 +10,7 @@ const ProductSchema = new mongoose.Schema({
     expiring_date: { type: Date},
 },{timestamps: {createdAt: 'created_at', modifiedAt: 'modified_at'}
 });
+
+ProductSchema.plugin(mongoosePaginate);
 
 module.exports = mongoose.model('Products', ProductSchema);

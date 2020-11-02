@@ -25,7 +25,7 @@ if (env === 'development') {
 exports.connect = () => {
   console.log(process.env.MONGO_URI);
   mongoose
-    .connect( process.env.MONGO_URI||'mongodb://127.0.0.1:27017/express-development', {
+    .connect( process.env.MONGO_URI||'mongodb://127.0.0.1:27017/talent-exam', {
       useCreateIndex: true,
       keepAlive: 1,
       useNewUrlParser: true,

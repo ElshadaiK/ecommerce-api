@@ -11,6 +11,7 @@ const { routes } = require('./config/routes');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var authRouter = require('./routes/auth');
 
 var app = express();
 
@@ -31,5 +32,6 @@ app.use(jwt({ secret: jwt_key, algorithms: ['HS256']})
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/auth', authRouter);
 
 module.exports = app;

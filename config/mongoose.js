@@ -2,8 +2,6 @@ const mongoose = require('mongoose');
 const logger = require('./../config/logger');
 const { mongo, env } = require('./vars');
 
-const migration = require('../lib/migration.lib');
-
 // set mongoose Promise to Bluebird
 mongoose.Promise = Promise;
 

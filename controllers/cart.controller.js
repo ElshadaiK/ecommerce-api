@@ -220,47 +220,33 @@ exports.getCart = async (req, res, next) => {
     }
 }
 
-exports.getTotal = async (req, res) => {
+exports.getTotal = async (req, res, next) => {
     const {user} = req
-    const {itemId, quantity} = req.body
     try{
+
         if(user){
-            const item = await productModel.findById(itemId);
-            if(item){
-                const user_id = user.data._id;
-                if(item.quantity >= quantity){
-                    const newlyAddedItems = {
-                        item: itemId,
-                        amount: quantity
-                    }
-                    let cart = await cartModel.findOne({user: user_id, status: 'pending'})
-                    if(cart){
-                        cart = await cartModel.create({user: user_id, status: 'pending'})
-                    }else{
-                        // If there is the item added in the cart before
-                    }
-                    const updatedCart = await cartModel.updateOne(
-                        {user: user_id, status: 'pending'},
-                        {$push: {items: newlyAddedItems}},
-                        {new: true}
-                    );
-                    // Update the store
-                    
-                    res.json(updatedCart);
-                    next();
-                }
-                else{
-                    throw new Error(`There aren't enough quantities available. The maximun you can buy is ${item.quantity}`)
-                }
+            const user_id = user.data._id
+            const cart = await cartModel.findOne({user: user_id, status: 'pending'})
+            if(!cart) throw new Error("You don't have a cart");
+            const available_items = cart.items
+            let total = 0;
+            for (let index = 0; index < available_items.length; index++) {
+                const itemId = available_items[index].item
+                const product = await productModel.findById(itemId);
+                total += (product.price_per_item) * (+available_items[index].amount)
+                
             }
-            else{
-                throw new Error('Item not found') 
-            }
+            const updatedCart = await cartModel.findOneAndUpdate(
+                {user: user_id, status: 'pending'},
+                {total_price: total},
+                {new: true}
+            );
+            res.json(updatedCart)
+            next()
         }
         else{
             throw new Error('You have to login first') 
         }
-
     }
     
     catch (err) {

@@ -3,6 +3,7 @@ var router = require("express-promise-router")();
 const  {productFormRequest} = require('../middlewares/form-request/product')
 const { hasPermissions } = require('../middlewares/auth');
 const productController = require('../controllers/product.controller')
+const cartController = require('../controllers/cart.controller')
 
 router.get('/products', 
   // hasPermissions(['view any product', 'view product']), 
@@ -12,9 +13,9 @@ router.get('/:id', hasPermissions(['view product']),  productController.get);
 
 router.post('/addtocart', 
   // hasPermissions(['adding to cart']), 
-  productController.addToCart);
+  cartController.addToCart);
 
-router.post('/purchase', hasPermissions(['purchase']), productController.purchase);
+router.post('/purchase', hasPermissions(['purchase']), cartController.purchase);
 
 // router.patch('/:id', hasPermissions(['update user']), userController.update);
 

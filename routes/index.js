@@ -8,7 +8,10 @@ const cartController = require('../controllers/cart.controller')
 /**
  * @typedef CART
  * @property {array} items - Array of cart items with their amount
- * @property {string} user_id - cart owner
+ * @property {string} user - The user id for the cart
+ * @property {number} total_price - Total price of items in the cart
+ * @property {string} status - The status of the cart, either 'pending' or 'purchased'
+ 
 */
 
 /**

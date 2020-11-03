@@ -9,19 +9,25 @@ router.get('/products',
   // hasPermissions(['view any product', 'view product']), 
   productController.All);
 
-router.get('/:id', hasPermissions(['view product']),  productController.get);
+router.get('/products:id', hasPermissions(['view product']),  productController.get);
 
 router.post('/addtocart', 
   // hasPermissions(['adding to cart']), 
   cartController.addToCart);
 
-router.post('/purchase', hasPermissions(['purchase']), cartController.purchase);
+router.post('/purchase', 
+  // hasPermissions(['purchase']), 
+  cartController.purchase);
 
 router.post('/clearcart', 
   // hasPermissions(['purchase']), 
   cartController.clear);
 
 router.post('/removefromcart', cartController.removeFromCart)
+
+router.get('/getCart', cartController.getCart)
+
+router.get('/getTotal', cartController.getTotal)
 
 // router.patch('/:id', hasPermissions(['update user']), userController.update);
 

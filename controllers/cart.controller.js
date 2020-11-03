@@ -195,6 +195,82 @@ exports.purchase = async (req, res) => {
       });
     }
 }
+
+exports.getCart = async (req, res, next) => {
+    const {user} = req
+    try{
+
+        if(user){
+            const user_id = user.data._id
+            const cart = await cartModel.findOne({user: user_id, status: 'pending'}).populate({path: 'items.item', model: 'Products', select: 'name'})
+            if(!cart) throw new Error("You don't have a cart");
+            res.json(cart)
+            next()
+        }
+        else{
+            throw new Error('You have to login first') 
+        }
+    }
+    
+    catch (err) {
+      res.status(404).json({
+          error: true,
+          message: err.message
+      });
+    }
+}
+
+exports.getTotal = async (req, res) => {
+    const {user} = req
+    const {itemId, quantity} = req.body
+    try{
+        if(user){
+            const item = await productModel.findById(itemId);
+            if(item){
+                const user_id = user.data._id;
+                if(item.quantity >= quantity){
+                    const newlyAddedItems = {
+                        item: itemId,
+                        amount: quantity
+                    }
+                    let cart = await cartModel.findOne({user: user_id, status: 'pending'})
+                    if(cart){
+                        cart = await cartModel.create({user: user_id, status: 'pending'})
+                    }else{
+                        // If there is the item added in the cart before
+                    }
+                    const updatedCart = await cartModel.updateOne(
+                        {user: user_id, status: 'pending'},
+                        {$push: {items: newlyAddedItems}},
+                        {new: true}
+                    );
+                    // Update the store
+                    
+                    res.json(updatedCart);
+                    next();
+                }
+                else{
+                    throw new Error(`There aren't enough quantities available. The maximun you can buy is ${item.quantity}`)
+                }
+            }
+            else{
+                throw new Error('Item not found') 
+            }
+        }
+        else{
+            throw new Error('You have to login first') 
+        }
+
+    }
+    
+    catch (err) {
+      res.status(404).json({
+          error: true,
+          message: err.message
+      });
+    }
+}
+
 exports.clear = async (req, res, next) => {
     const {user} = req
     try{

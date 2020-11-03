@@ -3,6 +3,7 @@ var router = require("express-promise-router")();
 const  {productFormRequest} = require('../middlewares/form-request/product')
 const { hasPermissions } = require('../middlewares/auth');
 const productController = require('../controllers/product.controller')
+const {upload} = require('../middlewares/upload');
 
 /**
  * @typedef PRODUCT
@@ -11,6 +12,7 @@ const productController = require('../controllers/product.controller')
  * @property {number} quantity.required - Products's quantity
  * @property {number} price_per_item.required - Products's price per item
  * @property {date} expiring_date - Products's expiring date
+ * @property {file} file - Products's image
 */
 
 /**
@@ -55,6 +57,7 @@ router.get('/:id', hasPermissions(['view product']),productController.get);
  */
 router.post('/', 
     hasPermissions(['create product']) && productFormRequest('createProduct'), 
+    upload.single('image'),
     productController.create);
 
 

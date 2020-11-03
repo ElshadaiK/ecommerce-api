@@ -27,7 +27,8 @@ exports.productFormRequest = schemaName => async (req,res,next) => {
 
                 price_per_item : Joi.number()
                     .min(0)
-                    .required()
+                    .required(),
+                file : Joi.string()
             }),
         updateProduct: () => 
             Joi.object({

@@ -1,4 +1,7 @@
-const { pick } = require('lodash')
+const { pick } = require('lodash');
+const fs = require('fs'); 
+const path = require('path'); 
+const upload = require('../middlewares/upload')
 
 const productModel = require('../models/product-model');
 
@@ -55,14 +58,25 @@ exports.get = async (req, res) => {
 
 exports.create = async (req, res) => {
     try {
-        
-        const product = await productModel.create({...req.body})
+        const {file} = req.body
+        let product;
+        if(file){
+            product = await productModel.create({...req.body, 
+                img: { 
+                    data: fs.readFileSync(path.join(__dirname + '/..' + '/uploads/' + req.file.filename)), 
+                    contentType: 'image/png'
+                }
+            })
+        }
+        else{
+            product = await productModel.create({...req.body})
+        }
 
         res.json(product)
     } catch (error) {
         res.status(400).json({
             error: true,
-            message: error
+            message: error.message
         })
     }
 

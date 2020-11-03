@@ -5,7 +5,7 @@ const { hasPermissions } = require('../middlewares/auth');
 const productController = require('../controllers/product.controller')
 
 router.get('/', 
-    // hasPermissions(['view product']),
+    hasPermissions(['view product']),
     productController.All);
 
 router.get('/:id', hasPermissions(['view user']),productController.get);

@@ -147,45 +147,27 @@ exports.removeFromCart = async (req, res, next) => {
 
 exports.purchase = async (req, res) => {
     const {user} = req
-    const {itemId, quantity} = req.body
+    const {approval} = req.body
     try{
+
         if(user){
-            const item = await productModel.findById(itemId);
-            if(item){
-                const user_id = user.data._id;
-                if(item.quantity >= quantity){
-                    const newlyAddedItems = {
-                        item: itemId,
-                        amount: quantity
-                    }
-                    let cart = await cartModel.findOne({user: user_id, status: 'pending'})
-                    if(cart){
-                        cart = await cartModel.create({user: user_id, status: 'pending'})
-                    }else{
-                        // If there is the item added in the cart before
-                    }
-                    const updatedCart = await cartModel.updateOne(
-                        {user: user_id, status: 'pending'},
-                        {$push: {items: newlyAddedItems}},
-                        {new: true}
-                    );
-                    // Update the store
-                    
-                    res.json(updatedCart);
-                    next();
-                }
-                else{
-                    throw new Error(`There aren't enough quantities available. The maximun you can buy is ${item.quantity}`)
-                }
-            }
-            else{
-                throw new Error('Item not found') 
-            }
+            const user_id = user.data._id
+            const cart = await cartModel.findOne({user: user_id, status: 'pending'}).populate({path: 'items.item', model: 'Products', select: 'name'})
+            if(!cart) throw new Error("You don't have a cart");
+
+            if(approval != "APPROVED") throw new Error("You're not approved to purchase");
+            const updatedCart = await cartModel.findOneAndUpdate(
+                {user: user_id, status: 'pending'},
+                {status: 'purchased'},
+                {new: true}
+            );
+
+            res.json(updatedCart)
+            next()
         }
         else{
             throw new Error('You have to login first') 
         }
-
     }
     
     catch (err) {

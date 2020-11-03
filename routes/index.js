@@ -12,11 +12,11 @@ router.get('/allitems',
 router.get('/products:id', hasPermissions(['view product']),  productController.get);
 
 router.post('/addtocart', 
-  hasPermissions(['add to cart']), 
+  hasPermissions(['add to cart']) && productFormRequest('addToCart'),
   cartController.addToCart);
 
 router.post('/purchase', 
-  hasPermissions(['purchase']), 
+  hasPermissions(['purchase']) && productFormRequest('purchase'), 
   cartController.purchase);
 
 router.post('/clearcart', 
@@ -24,7 +24,7 @@ router.post('/clearcart',
   cartController.clear);
 
 router.post('/removefromcart', 
-  hasPermissions(['remove from cart']), 
+  hasPermissions(['remove from cart']) && productFormRequest('removeFromCart'), 
   cartController.removeFromCart)
 
 router.get('/getCart', 

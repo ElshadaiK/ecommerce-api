@@ -37,6 +37,20 @@ exports.productFormRequest = schemaName => async (req,res,next) => {
                     .max(30)
                     .required(),
             }),
+        addToCart: () => 
+            Joi.object({
+                itemId: Joi.string().required(),
+                quantity: Joi.number().required(),
+            }),
+        purchase: () => 
+            Joi.object({
+                approval: Joi.string().required()
+            }),
+        removeFromCart: () => 
+            Joi.object({
+                itemId: Joi.string().required(),
+                quantity_to: Joi.number().required(),
+            }),
     }
     try {
        const {error } =  validationObjects[schemaName]().validate(req.body)

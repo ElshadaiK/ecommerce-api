@@ -17,13 +17,12 @@ exports.productFormRequest = schemaName => async (req,res,next) => {
                     .max(30)
                     .required(),
             
-                quantitiy: Joi.number()
+                quantity: Joi.number()
                     .min(1)
                     .required(),
             
                 expiring_date: Joi.date()
-                    .format("YYYY-MM-DD")
-                    .min(today())
+                    .min(Date.now())
                     .message('"date" cannot be earlier than today'),
 
                 price_per_item : Joi.number()

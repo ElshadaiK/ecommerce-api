@@ -145,7 +145,7 @@ exports.removeFromCart = async (req, res, next) => {
     }
 }
 
-exports.purchase = async (req, res) => {
+exports.purchase = async (req, res, next) => {
     const {user} = req
     const {approval} = req.body
     try{

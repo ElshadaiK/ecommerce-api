@@ -11,14 +11,41 @@ const permissions = [
     'view user',
     'update user',
     'remove user',
+
+    'view any product',
+    'view product',
+    'update product',
+    'create product',
+    'remove product',
+
+    'add to cart',
+    'purchase',
+    'clear cart',
+    'remove from cart',
+    'get cart',
+    'get total',
+
+    'add to any cart',
+    'purchase any',
+    'clear any cart',
+    'remove from any cart',
+    'get any cart',
+    'get any total'
+
 ]
 
 const roles = {
     admin: [...permissions],
     user: [
-        'create user',
-        'view user',
-        'update user',
+        'view any product',
+        'view product',
+
+        'add to cart',
+        'purchase',
+        'clear cart',
+        'remove from cart',
+        'get cart',
+        'get total'
     ]
 }
 

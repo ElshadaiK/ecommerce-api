@@ -26,7 +26,7 @@ const userController = require('../controllers/user.controller')
 router.get('/', hasPermissions(['view any user', 'view user']),userController.All);
 
 /**
- * Create a new user 
+ * Returns a  user 
  * 
  * @route GET /users/{id}
  * @group User 

@@ -130,15 +130,25 @@ exports.purchase = async (req, res) => {
       });
     }
 }
-exports.clear = async (req, res) => {
+exports.clear = async (req, res, next) => {
     const {user} = req
-    const {itemId, quantity} = req.body
     try{
-
         if(user){
-
+            const user_id = user.data._id;
+            const cart = await cartModel.findOne({user: user_id, status: 'pending'})
+            if(cart){
+                updatedCart = await cartModel.findOneAndUpdate(
+                    {user: user_id, status: 'pending'},
+                    {items: [], total_price: 0},
+                    {new: true}
+                )
+                res.json(updatedCart);
+                next();
+            }
+            else{
+                throw new Error("You don't have a cart")
+            }                 
         }
-        
         else{
             throw new Error('You have to login first') 
         }

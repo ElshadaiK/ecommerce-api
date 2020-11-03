@@ -21,6 +21,8 @@ router.post('/clearcart',
   // hasPermissions(['purchase']), 
   cartController.clear);
 
+router.post('/removefromcart', cartController.removeFromCart)
+
 // router.patch('/:id', hasPermissions(['update user']), userController.update);
 
 // router.delete('/:id', hasPermissions(['remove user']),userController.remove);

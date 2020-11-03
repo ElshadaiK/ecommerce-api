@@ -15,13 +15,13 @@ exports.All = async (req, res) => {
 
         if(req.query.filter) {
             let filter = JSON.parse(req.query.filter);
-            query = pick(filter, ['name', 'price_per_item']) 
+            query = pick(filter, ['name', 'vendor', 'price_per_item']) 
             
         }
         
         const options = {
             sort: Object.values(sort).length > 0 ? sort: {
-                'created_at': -1
+                'price_per_item': 1
             },
             page: req.query.page || 1,
             limit: req.query.limit || 10

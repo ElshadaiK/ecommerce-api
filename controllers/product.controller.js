@@ -45,7 +45,7 @@ exports.All = async (req, res) => {
 exports.get = async (req, res) => {
 
     try {
-        const products = await productModel.findById(req.query.id)
+        const products = await productModel.findById(req.params.id)
         res.json(products)
     } catch (error) {
         res.status(404).json({

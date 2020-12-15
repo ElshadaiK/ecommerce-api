@@ -30,10 +30,7 @@ exports.authFormRequest = schemaName => async (req,res,next) => {
                     .email(),
                 
                 phone_no : Joi_Num.string().phoneNumber().required(),
-                plate_number : Joi.string()
-                    .length(5)
-                    .pattern(new RegExp('^[0-9]+$'))
-                    .required(),
+                
             }),
         forgetPassword: () => 
             Joi.object({
